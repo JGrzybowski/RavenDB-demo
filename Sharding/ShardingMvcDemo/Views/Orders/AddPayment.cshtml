@@ -1,0 +1,32 @@
+﻿@model ShardingMvcDemo.ViewModels.AddPaymentViewModel
+
+@{
+    ViewBag.Title = "Add Payment";
+}
+
+<h2>Add Payment</h2>
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Items per page</legend>
+        @Html.HiddenFor(model => model.OrderId)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PaymentId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PaymentId)
+            @Html.ValidationMessageFor(model => model.PaymentId)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PaymentAmount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PaymentAmount)
+            @Html.ValidationMessageFor(model => model.PaymentAmount)
+        </div>
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </fieldset>
+}

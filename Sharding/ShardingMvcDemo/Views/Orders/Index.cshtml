@@ -1,0 +1,78 @@
+﻿@model ShardingMvcDemo.ViewModels.OrdersHomeViewModel
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+<table>
+    <colgroup>
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+        <col style="width: 15%" />
+        <col style="width: 8%" />
+        <col style="width: 12%" />
+        <col style="width: 10%" />
+        <col style="width: 10%" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Products</th>
+            <th>Balance</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var order in Model.Orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.ClientFirstName</td>
+                <td>@order.ClientLastName</td>
+                <td>
+                    <ol>
+                        @foreach (var product in order.Products)
+                        {
+                            <li>@product.Name</li>
+                        }
+                    </ol>
+                </td>
+                <td>@order.Balance</td>
+                <td><a class="OrdersLink" href="./Orders/AddPayment?orderId=@order.Id">Add payment</a></td>
+                <td><a class="OrdersLink" href="./Orders/AddProduct?orderId=@order.Id">Add product</a></td>
+                <td><a class="OrdersLink" href="./Orders/DeleteOrder?orderId=@order.Id">Delete order</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+    @if (Model.CurrentPage > 1)
+    {
+        <a href="./Orders?pageNumber=@(Model.CurrentPage - 1)&itemsPerPage=@(Model.ItemsPerPage)">Previous page</a>
+    }
+    @if (Model.Orders.Count == Model.ItemsPerPage)
+    {
+        <a href="./Orders?pageNumber=@(Model.CurrentPage + 1)&itemsPerPage=@(Model.ItemsPerPage)">Next page</a>
+    }
+</p>
+@using (Html.BeginForm("Index", "Orders", FormMethod.Get))
+{
+    <fieldset>
+        <legend>Items per page</legend>
+        @Html.HiddenFor(model => model.CurrentPage)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ItemsPerPage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ItemsPerPage)
+            @Html.ValidationMessageFor(model => model.ItemsPerPage)
+        </div>
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </fieldset>
+}

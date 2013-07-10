@@ -1,0 +1,74 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientModel", "ClientModel\ClientModel.csproj", "{6D2B74B4-2541-428B-B6FA-65FAE530634E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShardingMvcDemo", "ShardingMvcDemo\ShardingMvcDemo.csproj", "{25B5498A-CCC7-4C4A-A379-F4D7B725B069}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientDAL", "ClientDAL\ClientDAL.csproj", "{D0FEA97C-8228-4F02-94B0-CCC3F04C7152}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBConnectorTester", "DBConnectorTester\DBConnectorTester.csproj", "{A4ED17DF-1227-4768-AC25-6B940BFA4913}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderModel", "OrderModel\OrderModel.csproj", "{40B11C24-5A85-43E9-9DE3-6A4A4ECFCC4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{6E89A007-DF73-4EED-BDA5-01A9A2405A0A}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://10.255.250.69:8080/tfs/praktyki
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ClientModel\\ClientModel.csproj
+		SccProjectName1 = ClientModel
+		SccLocalPath1 = ClientModel
+		SccProjectUniqueName2 = ShardingMvcDemo\\ShardingMvcDemo.csproj
+		SccProjectName2 = ShardingMvcDemo
+		SccLocalPath2 = ShardingMvcDemo
+		SccProjectUniqueName3 = ClientDAL\\ClientDAL.csproj
+		SccProjectName3 = ClientDAL
+		SccLocalPath3 = ClientDAL
+		SccProjectUniqueName4 = DBConnectorTester\\DBConnectorTester.csproj
+		SccProjectName4 = DBConnectorTester
+		SccLocalPath4 = DBConnectorTester
+		SccProjectUniqueName5 = OrderModel\\OrderModel.csproj
+		SccProjectName5 = OrderModel
+		SccLocalPath5 = OrderModel
+		SccProjectUniqueName6 = Services\\Services.csproj
+		SccProjectName6 = Services
+		SccLocalPath6 = Services
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6D2B74B4-2541-428B-B6FA-65FAE530634E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D2B74B4-2541-428B-B6FA-65FAE530634E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D2B74B4-2541-428B-B6FA-65FAE530634E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D2B74B4-2541-428B-B6FA-65FAE530634E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25B5498A-CCC7-4C4A-A379-F4D7B725B069}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25B5498A-CCC7-4C4A-A379-F4D7B725B069}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25B5498A-CCC7-4C4A-A379-F4D7B725B069}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25B5498A-CCC7-4C4A-A379-F4D7B725B069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0FEA97C-8228-4F02-94B0-CCC3F04C7152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FEA97C-8228-4F02-94B0-CCC3F04C7152}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FEA97C-8228-4F02-94B0-CCC3F04C7152}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FEA97C-8228-4F02-94B0-CCC3F04C7152}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4ED17DF-1227-4768-AC25-6B940BFA4913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4ED17DF-1227-4768-AC25-6B940BFA4913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4ED17DF-1227-4768-AC25-6B940BFA4913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4ED17DF-1227-4768-AC25-6B940BFA4913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40B11C24-5A85-43E9-9DE3-6A4A4ECFCC4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B11C24-5A85-43E9-9DE3-6A4A4ECFCC4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B11C24-5A85-43E9-9DE3-6A4A4ECFCC4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B11C24-5A85-43E9-9DE3-6A4A4ECFCC4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E89A007-DF73-4EED-BDA5-01A9A2405A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E89A007-DF73-4EED-BDA5-01A9A2405A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E89A007-DF73-4EED-BDA5-01A9A2405A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E89A007-DF73-4EED-BDA5-01A9A2405A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

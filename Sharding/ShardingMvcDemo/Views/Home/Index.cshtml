@@ -1,0 +1,68 @@
+﻿@using ShardingMvcDemo.ViewModels
+@model ClientHomeViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h3>Clients</h3>
+<table>
+    <colgroup>
+        <col style="width: 20%" />
+        <col style="width: 20%" />
+        <col style="width: 20%" />
+        <col style="width: 15%" />
+        <col style="width: 10%" />
+        <col style="width: 15%"/>
+    </colgroup>
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Country</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ClientEditViewModel client in Model.Clients)
+        {
+            <tr>
+                <td>@client.FirstName</td>
+                <td>@client.LastName</td>
+                <td>@client.Country</td>
+                <td><a href="./Delete?Id=@client.Id">Delete</a></td>
+                <td><a href="./Edit?Id=@client.Id">Edit</a></td>
+                <td><a href="./Orders/AddOrder?clientId=@client.Id">Add order</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<p>
+
+    @if (Model.CurrentPage > 1)
+    {
+        <a href="./?currentpage=@(Model.CurrentPage - 1)&itemsPerPage=@Model.ItemsPerPage">Previous page</a>
+    }
+    @if (Model.Clients.Count == Model.ItemsPerPage)
+    {
+        <a href="./?currentpage=@(Model.CurrentPage + 1)&itemsPerPage=@Model.ItemsPerPage">Next page</a>
+    }
+</p>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Get))
+{
+    <fieldset>
+        <legend>Items per page</legend>
+        @Html.HiddenFor(model => model.CurrentPage)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ItemsPerPage)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ItemsPerPage)
+            @Html.ValidationMessageFor(model => model.ItemsPerPage)
+        </div>
+        <p>
+            <input type="submit" value="Submit" />
+        </p>
+    </fieldset>
+}
+

@@ -1,0 +1,49 @@
+﻿@model ShardingMvcDemo.ViewModels.OrdersAddViewModel
+@{
+    ViewBag.Title = "Add order";
+}
+
+<h2>Add order</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Order</legend>
+        @Html.HiddenFor(model => model.ClientId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProductName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ProductName)
+            @Html.ValidationMessageFor(model => model.ProductName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProductPrice)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ProductPrice)
+            @Html.ValidationMessageFor(model => model.ProductPrice)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PaymentAmount)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PaymentAmount)
+            @Html.ValidationMessageFor(model => model.PaymentAmount)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PaymentId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PaymentId)
+            @Html.ValidationMessageFor(model => model.PaymentId)
+        </div>
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
