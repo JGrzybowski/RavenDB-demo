@@ -19,8 +19,8 @@ namespace ShardingMvcDemo.Controllers
             {
                 var service = new ClientService(rdbc);
                 var clients = service.GetClients(currentPage, itemsPerPage);
-                var clientViewModels = new List<ClientEditViewModel>(clients.Count);
-                clientViewModels.AddRange(clients.Select(client => new ClientEditViewModel(client)));
+                var clientViewModels = new List<ClientEditViewModel>(clients.Results.Count);
+                clientViewModels.AddRange(clients.Results.Select(client => new ClientEditViewModel(client)));
 
                 var clientHomeViewModel = new ClientHomeViewModel
                 {
@@ -28,6 +28,10 @@ namespace ShardingMvcDemo.Controllers
                     CurrentPage = currentPage,
                     ItemsPerPage = itemsPerPage
                 };
+                foreach (var downServer in clients.ErrorConnectionStrings)
+                {
+                    clientHomeViewModel.AddDownServers(downServer);
+                }
                 return View(clientHomeViewModel);
             }
         }

@@ -36,7 +36,7 @@ namespace Services
             return _ravenDbConnection.GetClient(id);
         }
 
-        public List<Client> GetClients(int page, int itemsPerPage)
+        public ShardedResults<Client> GetClients(int page, int itemsPerPage)
         {
             return _ravenDbConnection.GetClients(page, itemsPerPage);
         }

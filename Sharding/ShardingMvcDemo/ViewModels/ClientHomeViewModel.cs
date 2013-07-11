@@ -12,5 +12,17 @@ namespace ShardingMvcDemo.ViewModels
 
         [Display(Name = "Items per page")]
         public int ItemsPerPage { get; set; }
+
+        private List<string> _downServersList = new List<string>();
+
+        public List<string> GetDownServersList()
+        {
+            return _downServersList;
+        }
+
+        public void AddDownServers(string server)
+        {
+            _downServersList.Add(server);
+        }
     }
 }

@@ -53,6 +53,8 @@
     <Compile Include="RavenDBConnection.cs" />
     <Compile Include="IRavenDbConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RavenDBConst.cs" />
+    <Compile Include="ShardedResults.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

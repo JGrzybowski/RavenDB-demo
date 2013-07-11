@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using ClientModel;
 using OrderModel;
 using Raven.Abstractions.Commands;
@@ -41,7 +43,6 @@ namespace ClientDAL
                 replicationStore.Conventions.FailoverBehavior =
                     FailoverBehavior.AllowReadsFromSecondariesAndWritesToSecondaries;
             }
-            _serverCounter = _gen.Next(_replicationStores.Count);
         }
         public void Dispose()
         {
@@ -55,7 +56,6 @@ namespace ClientDAL
         private List<IDocumentStore> _replicationStores = new List<IDocumentStore>();
         private readonly IDocumentStore _clientsDocumentStore;
         private Random _gen = new Random(DateTime.Now.Millisecond);
-        private int _serverCounter = 0;
         private const int MaxStorePerSession = 10000;
         #endregion
 
@@ -85,6 +85,7 @@ namespace ClientDAL
         }
 
         #endregion
+
         #region Deleting
 
         public void DeleteClient(string id)
@@ -120,6 +121,7 @@ namespace ClientDAL
         }
 
         #endregion
+
         #region Updating
 
         public void UpdateClient(string id, string name, string surname, string country, string region)
@@ -190,6 +192,7 @@ namespace ClientDAL
         }
 
         #endregion
+
         #region Reading
 
         public Client GetClient(string id)
@@ -205,21 +208,34 @@ namespace ClientDAL
          * GetClients musi pobierać więcej danych, niż się wydaje ze względu na podział danych
          * Komenda .Skip(n) pomija n pierwszych wyników z każdego sharda/servera, wiec nie jest tu przydatny
          */
-        public List<Client> GetClients(int page, int itemsPerPage)
+        public ShardedResults<Client> GetClients(int page, int itemsPerPage)
         {
+            var results = new ShardedResults<Client>();
             var query = new List<Client>();
-            foreach (var pair in _shards)
+            Parallel.ForEach(_shards, pair =>
             {
-                //TODO zabezpieczyć na wypadek zbyt stron
-                using (var session = pair.Value.OpenSession())
+                try
                 {
-                    query.AddRange(session.Query<Client>()
-                        .OrderByDescending(client => client.ModificationDateTime)
-                        .Take(itemsPerPage * page)
-                        .ToArray());
+                    int limit = itemsPerPage*page;
+                    while (limit > 0)
+                    {
+                        using (var session = pair.Value.OpenSession())
+                        {
+                            query.AddRange(session.Query<Client>()
+                                .OrderByDescending(client => client.ModificationDateTime)
+                                .Take(limit)
+                                .ToArray());
+                        }
+                        limit -= Math.Min(itemsPerPage, RavenDBConst.MaxPageSize);
+                    }
+                }
+                catch (WebException webException)
+                {
+                    results.ErrorConnectionStrings.Add(pair.Key);
                 }
             }
-            List<Client> results = query
+            );
+            results.Results = query
                 .OrderByDescending(c => c.ModificationDateTime)
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
@@ -230,9 +246,8 @@ namespace ClientDAL
         #endregion
         #endregion
 
-
         #region Managing the Orders DB
-        #region Taking one of the replications servers
+        #region Picking one of the replications servers
 
         private IDocumentStore GetReplicationStore()
         {
@@ -245,8 +260,7 @@ namespace ClientDAL
 
         public void AddOrder(Order order)
         {
-            _serverCounter = _gen.Next(_replicationStores.Count);
-            using (var session = _replicationStores[_serverCounter].OpenSession())
+            using (var session = GetReplicationStore().OpenSession())
             {
                 session.Store(order);
                 session.SaveChanges();
@@ -254,7 +268,6 @@ namespace ClientDAL
         }
         public void AddOrders(List<DummyOrder> list)
         {
-            _serverCounter = _gen.Next(_replicationStores.Count);
             var commands = new List<ICommandData>();
             foreach (var order in list)
             {
@@ -266,15 +279,15 @@ namespace ClientDAL
                     Metadata = new RavenJObject()
                 });
             }
-            var batchResults = _replicationStores[_serverCounter].DatabaseCommands.Batch(commands);
+            var batchResults = GetReplicationStore().DatabaseCommands.Batch(commands);
         }
         public void AddOrders(List<Order> list)
         {
             int limit = 0;
-            _serverCounter = _gen.Next(_replicationStores.Count);
+           
             while (limit++ < Math.Round((double)(list.Count / MaxStorePerSession)))
             {
-                using (var session = _replicationStores[_serverCounter].OpenSession())
+                using (var session = GetReplicationStore().OpenSession())
                 {
                     foreach (var order in list.Skip(MaxStorePerSession * (limit - 1)).Take(MaxStorePerSession))
                     {
@@ -286,6 +299,7 @@ namespace ClientDAL
         }
 
         #endregion
+        
         #region Deleting
 
         public void DeleteOrder(string id)
@@ -312,22 +326,20 @@ namespace ClientDAL
         public void DeleteAllOrders()
         {
             List<Order> results = null;
-            int limit = _replicationStores.Count;
-
             do
             {
-                using (var session = _replicationStores[_serverCounter].OpenSession())
+                using (var session = GetReplicationStore().OpenSession())
                 {
                     results = session.Query<Order>().Take(1024).ToList();
                     foreach (Order order in results)
                         session.Advanced.Defer(new DeleteCommandData { Key = order.Id });
                     session.SaveChanges();
                 }
-
             } while (results.Count != 0);
         }
 
         #endregion
+        
         #region Updating
 
         public void UpdateOrder(string orderId, string clientId, List<Payment> payments, List<Product> products, DateTime timeOfOrder)
@@ -417,6 +429,7 @@ namespace ClientDAL
         }
 
         #endregion
+        
         #region Reading
 
         public Order GetOrder(string id)

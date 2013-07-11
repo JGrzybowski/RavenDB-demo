@@ -75,7 +75,7 @@ namespace DBConnectorTester
             var clientsList = dbConnection.GetClients(1, 15);
             for (int i = 0; i < nrOrders; ++i)
             {
-                var client = clientsList[gen.Next(clientsList.Count)];
+                var client = clientsList.Results[gen.Next(clientsList.Results.Count)];
                 result.Add(new Order(client.Id, client.FirstName, client.LastName, client.Country, null, null, DateTime.Now));
             }
             foreach (var order in result)
@@ -94,7 +94,7 @@ namespace DBConnectorTester
         {
             var result = new List<DummyOrder>();
             DateTime time = _start.AddDays(gen.Next(range));
-            var clientsList = dbConnection.GetClients(1, 15);
+            var clientsList = dbConnection.GetClients(1, 15).Results;
             for (int i = 0; i < nrOrders; ++i)
             {
                 var client = clientsList[gen.Next(clientsList.Count)];
@@ -120,7 +120,7 @@ namespace DBConnectorTester
             var dbConnector = new RavenDbConnection(manager);
             const bool _populating = false;
             const int _nrClients = 100000;
-            const bool _reading = false;
+            const bool _reading = true;
             const int _page = 6;
             const int _itemsPerPage = 10000;
             const bool _deleting = false;
@@ -140,10 +140,18 @@ namespace DBConnectorTester
 
             if (_reading)
             {
-                List<Client> list = dbConnector.GetClients(_page, _itemsPerPage);
-                foreach (var client in list)
+                ShardedResults<Client> list = dbConnector.GetClients(_page, _itemsPerPage);
+                foreach (var client in list.Results)
                 {
                     Console.WriteLine(client.ToString());
+                }
+                if (list.ErrorConnectionStrings.Count > 0)
+                {
+                    Console.WriteLine("Failed Connections");
+                    foreach (var conectionStringName in list.ErrorConnectionStrings)
+                    {
+                        Console.WriteLine(conectionStringName);
+                    }
                 }
             }
             #endregion
@@ -151,7 +159,7 @@ namespace DBConnectorTester
 
             if (_deleting)
             {
-                List<Client> list = dbConnector.GetClients(_page, _itemsPerPage);
+                //ShardedResults<Client> list = dbConnector.GetClients(_page, _itemsPerPage);
                 dbConnector.DeleteAllClients();
             }
 
