@@ -1,7 +1,7 @@
 RavenDB-demo
 ============
 
-An MVC 4 application created during the first two weeks of an internship in July 2013 in [Billennium](http://www.billennium.pl/) by [Pawel Michna](http://pawelmichna.com) and Jan Grzybowski.
+An MVC 4 application created during the first two weeks of an internship in July 2013 in [Billennium](http://www.billennium.pl/) by [Pawel Michna](http://pawelmichna.com) and [Jan Grzybowski](https://github.com/jgrzybowski).
 Its purpose is to demonstrate the functionality and ease of use of [RavenDB](http://ravendb.net/).
 
 ## Running ##
